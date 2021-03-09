@@ -10,15 +10,15 @@ import (
 )
 
 func main() {
-    file        := os.Args[1]
-    yamlData    := ingest.Parse(file)
-    fmt.Println(yamlData)
+    file := os.Args[1]
+    data := ingest.Parse(file)
 
-    //for _, i := range yamlData.Ticker {
-    //    fmt.Println(i)
+    fmt.Println(data)
+    for k, v := range data.Tickers {
+        fmt.Println(k, v)
 
-        //q, err := quote.Get(i)
-        //if err != nil { panic(err) }
-        //fmt.Println(q)
-    //}
+    //    //q, err := quote.Get(i)
+    //    //if err != nil { panic(err) }
+    //    //fmt.Println(q)
+    }
 }
