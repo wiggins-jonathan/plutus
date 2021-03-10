@@ -10,11 +10,8 @@ import (
 )
 
 type Data struct {
-    Total   float64 `yaml:"total"`
-    Tickers map[string]struct {
-        CurrentAmount   float64 `yaml:"current"`
-        DesiredPercent  float64 `yaml:"desired"`
-    }
+    Total   float64
+    Tickers map[string]interface{}
 }
 
 func Parse(file string) *Data {
