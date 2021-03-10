@@ -6,7 +6,7 @@ import (
 
     "prc/ingest"
 
-    _ "github.com/piquette/finance-go/quote"
+    "github.com/piquette/finance-go/quote"
 )
 
 func main() {
@@ -14,11 +14,11 @@ func main() {
     data := ingest.Parse(file)
 
     fmt.Println(data)
-    for k, v := range data.Tickers {
-        fmt.Println(k, v)
-
-    //    //q, err := quote.Get(i)
-    //    //if err != nil { panic(err) }
-    //    //fmt.Println(q)
+    for k, _ := range data.Tickers {
+        q, err := quote.Get(k)
+        if err != nil {
+            fmt.Println("Error getting ticker data from Yahoo Finance", err)
+        }
+        fmt.Println(q)
     }
 }
