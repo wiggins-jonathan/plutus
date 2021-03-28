@@ -3,6 +3,7 @@ package main
 import (
     "fmt"
     "os"
+    "sync"
 
     "prc/ingest"
     "prc/cmd"
@@ -15,12 +16,19 @@ func main() {
     file := validArgs[1]
     data := ingest.Parse(file)
 
-    fmt.Println(data)
+    wg := sync.WaitGroup{}
     for k, _ := range data.Tickers {
-        q, err := quote.Get(k)
-        if err != nil {
-            fmt.Println("Error getting ticker data from Yahoo Finance", err)
-        }
-        fmt.Println(q)
+        wg.Add(1)
+        go func(k string) {
+            q, err := quote.Get(k)
+            if err != nil {
+                fmt.Println("Error getting ticker data from Yahoo Finance", err)
+            }
+            //fmt.Printf("%+v", q) // Shows q struct fields
+            fmt.Println(q.ShortName)
+            fmt.Println(q.RegularMarketPrice)
+            wg.Done()
+        }(k)
     }
+    wg.Wait()
 }
