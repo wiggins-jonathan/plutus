@@ -5,12 +5,14 @@ import (
     "os"
 
     "prc/ingest"
+    "prc/cmd"
 
     "github.com/piquette/finance-go/quote"
 )
 
 func main() {
-    file := os.Args[1]
+    validArgs := cmd.ArgParse(os.Args)
+    file := validArgs[1]
     data := ingest.Parse(file)
 
     fmt.Println(data)
