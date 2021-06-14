@@ -17,7 +17,7 @@ func ArgParse(args []string) []string {
 }
 
 // Adds color to messages printed to the command line
-func colorize(message string, color string) {
+func Colorize(message string, color string) {
     switch color {
     case "red"      : color = "\033[31m"
     case "green"    : color = "\033[32m"
@@ -36,7 +36,7 @@ func colorize(message string, color string) {
 // Prints a red message & the usage statement to the command line & exits
 func Usage(messages ...string) {
     for _, message := range messages {
-        colorize(message, "red")
+        Colorize(message, "red")
     }
     os.Exit(1)
 }
