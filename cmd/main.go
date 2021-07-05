@@ -7,8 +7,7 @@ import (
     _ "flag"
 )
 
-// Checks command line args & return the args if valid, otherwise we call
-// Usage()
+// Checks command line args & return the args if valid, otherwise call Usage()
 func ArgParse(args []string) []string {
     if len(args) < 2 {
         Usage("You need at least one arg")
