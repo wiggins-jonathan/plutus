@@ -15,13 +15,15 @@ import (
 )
 
 type Ticker struct {
-    Current float64
-    Desired int
+    Current             float64
+    Desired             float64
+    RegularMarketPrice  float64
 }
 
 type Portfolio struct {
-    Total   float64
-    Tickers map[string]Ticker
+    Addition    float64
+    Tickers     map[string]*Ticker
+    Total       float64
 }
 
 // Parse a json or yaml file for data & return Portfolio struct
@@ -48,17 +50,18 @@ func FileParse(file string) *Portfolio {
 
     // Perform type assertions on our data & transform to Portfolio struct
     var p Portfolio
-    t := make(map[string]Ticker)
+    t := make(map[string]*Ticker)
+    var sumTotal float64
     for key, value := range data {
-        if key == "total" {
+        if key == "addition" {
             switch value.(type) {
             case int:   // Transform to float64
                 value := value.(int)
-                p.Total = float64(value)
+                p.Addition = float64(value)
             case float64:
-                p.Total = value.(float64)
+                p.Addition = value.(float64)
             default:
-                cmd.Usage("The <total> field must be a number")
+                cmd.Usage("The <addition> field must be a number")
             }
             continue
         }
@@ -66,20 +69,23 @@ func FileParse(file string) *Portfolio {
         // More type assertions
         value := value.(map[string]interface{})
         c := value["current"].(float64)
-        d := value["desired"].(int)
+        d := value["desired"].(float64)
 
-        t[key] = Ticker{
+        sumTotal = sumTotal + c
+
+        t[key] = &Ticker{
             Current: c,
             Desired: d,
         }
         p.Tickers = t
     }
+    p.Total = sumTotal
 
     return &p
 }
 
 // Concurrently get ticker data from finance-go & embed in Portfolio struct
-func GetTickerData(p *Portfolio) {
+func (p *Portfolio) GetTickerData() {
     wg := sync.WaitGroup{}
     for ticker, _ := range p.Tickers {
         wg.Add(1)
@@ -88,12 +94,38 @@ func GetTickerData(p *Portfolio) {
             if err != nil {
                 fmt.Println("Error getting ticker data from Yahoo Finance", err)
             }
-            fmt.Printf("%+v\n\n", q) // Shows q struct fields
-            //fmt.Println(q.Symbol, q.ShortName)
-            //fmt.Println(q.RegularMarketPrice)
-            //fmt.Printf("%T\n", q.RegularMarketPrice)
+
+            // Assign ticker data to Portfolio struct
+            // We might want to think about just wholly embedding q into p
+            p.Tickers[ticker].RegularMarketPrice = q.RegularMarketPrice
+
             wg.Done()
         }(ticker)
     }
     wg.Wait()
+}
+
+// Calculate the proportional number of shares to buy
+func (p *Portfolio) DoMath() {
+    for ticker, _ := range p.Tickers {
+        // Determine the actual percentage of each ticker for the portfolio
+        actualPercent := (p.Tickers[ticker].Current / p.Total) * 100
+
+        // Determine the difference between the actual percent that each ticker
+        // represents & the desired percent we want to obtain
+        percentDiff := (p.Tickers[ticker].Desired - actualPercent)
+
+        // Determine the percent amount of the total addition we need to add or
+        // subtract to reach our desired percentage of each ticker in our portfolio
+        targetPercent := (percentDiff + p.Tickers[ticker].Desired)
+
+        // Translate that difference in desired percentage into a dollar amount
+        // We must check if either of these are 0
+        amountToChange := (targetPercent * p.Total) / 100
+
+        // Giving us the # of shares to buy or sell to reach our desired percentage
+        // We must check if either of these are 0
+        sharesToBuy := (amountToChange / p.Tickers[ticker].RegularMarketPrice)
+        fmt.Println(sharesToBuy)
+    }
 }
