@@ -14,12 +14,14 @@ import (
     "github.com/piquette/finance-go/quote"
 )
 
+type Ticker struct {
+    Current float64
+    Desired int
+}
+
 type Portfolio struct {
     Total   float64
-    Tickers map[string]struct {
-        Current float64
-        Desired int
-    }
+    Tickers map[string]Ticker
 }
 
 // Parse a json or yaml file for data & return Portfolio struct
@@ -46,10 +48,7 @@ func FileParse(file string) *Portfolio {
 
     // Perform type assertions on our data & transform to Portfolio struct
     var p Portfolio
-    t := make(map[string]struct {
-        Current float64
-        Desired int
-    })
+    t := make(map[string]Ticker)
     for key, value := range data {
         if key == "total" {
             switch value.(type) {
@@ -69,11 +68,7 @@ func FileParse(file string) *Portfolio {
         c := value["current"].(float64)
         d := value["desired"].(int)
 
-        // Assign inner map to the p.Tickers anonymous struct
-        t[key] = struct {
-            Current float64
-            Desired int
-        }{
+        t[key] = Ticker{
             Current: c,
             Desired: d,
         }
