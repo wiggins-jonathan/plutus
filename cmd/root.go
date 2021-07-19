@@ -12,7 +12,7 @@ func ArgParse(args []string) {
 
     // Execute based on args
     switch args[1] {
-    case "server"   : fmt.Println("This will be the server entry point")
+    case "server"   : ExecuteServer()
     case "rebalance":
         if len(args) < 3 {
             Error("Please specify a file to parse for portfolio data\n")
