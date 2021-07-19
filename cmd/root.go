@@ -4,22 +4,33 @@ package cmd
 import (
     "os"
     "fmt"
-    _ "flag"
 )
 
-func Usage() {
-    fmt.Printf("PRC - This is generic usage for prc\n")
-    fmt.Printf("    This continues the usage\n")
+// Parses & validates args. Calls execute functions.
+func ArgParse(args []string) {
+    if len(args) < 2 { Error("Please specify a command\n") }
+
+    // Execute based on args
+    switch args[1] {
+    case "server"   : fmt.Println("This will be the server entry point")
+    case "rebalance":
+        if len(args) < 3 {
+            Error("Please specify a file to parse for portfolio data\n")
+        }
+        ExecuteRebalance(args[2])
+    default:
+        err := fmt.Sprintf("%s is not a valid command\n", args[1])
+        Error(err)
+    }
 }
 
-// Checks command line args & return the args if valid, otherwise call Usage()
-func ArgParse(args []string) []string {
-    if len(args) < 2 {
-        Colorize("Please specify a command", "red")
-        Usage()
-        os.Exit(1)
-    }
-    return args
+func Usage() {
+    fmt.Printf("PRC - A tool for recalculating your stock porfolio\n")
+    fmt.Printf("Usage:\n")
+    fmt.Printf("    prc <command> [arguments]\n")
+    fmt.Printf("Commands:\n")
+    fmt.Printf("    rebalance <file>    Rebalance a portfolio defined in a yaml or json file\n")
+    fmt.Printf("    server              Start a server instance listening for REST calls\n")
 }
 
 // Adds color to messages printed to the command line
@@ -44,5 +55,6 @@ func Error(messages ...interface{}) {
     for _, message := range messages {
         Colorize(message, "red")
     }
+    Usage()
     os.Exit(1)
 }
