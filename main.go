@@ -11,7 +11,8 @@ import (
 func main() {
     validArgs := cmd.ArgParse(os.Args)
     file := validArgs[1]
-    p := ingest.FileParse(file)
+    data := ingest.FileParse(file)
+    p := ingest.NewPortfolio(data)
     p.GetTickerData()
     p.DoMath()
 }

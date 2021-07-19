@@ -26,8 +26,8 @@ type Portfolio struct {
     Total       float64
 }
 
-// Parse a json or yaml file for data & return Portfolio struct
-func FileParse(file string) *Portfolio {
+// Parse a json or yaml file
+func FileParse(file string) map[string]interface{} {
     fileData, err := ioutil.ReadFile(file)
     if err != nil {
         fmt.Println("error reading", file, err)
@@ -48,7 +48,11 @@ func FileParse(file string) *Portfolio {
         os.Exit(1)
     }
 
-    // Perform type assertions on our data & transform to Portfolio struct
+    return data
+}
+
+// Validate data from file & transform to Portfolio struct
+func NewPortfolio(data map[string]interface{}) *Portfolio {
     var p Portfolio
     t := make(map[string]*Ticker)
     var sumTotal float64
@@ -84,7 +88,9 @@ func FileParse(file string) *Portfolio {
     return &p
 }
 
-// Concurrently get ticker data from finance-go & embed in Portfolio struct
+// Concurrently get ticker price from finance-go & embed in Portfolio struct
+// We might want to think about just wholly embedding q into p & then creating
+// multiple methods to return specific data
 func (p *Portfolio) GetTickerData() {
     wg := sync.WaitGroup{}
     for ticker, _ := range p.Tickers {
@@ -96,7 +102,6 @@ func (p *Portfolio) GetTickerData() {
             }
 
             // Assign ticker data to Portfolio struct
-            // We might want to think about just wholly embedding q into p
             p.Tickers[ticker].RegularMarketPrice = q.RegularMarketPrice
 
             wg.Done()
