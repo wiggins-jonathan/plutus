@@ -108,8 +108,9 @@ func (p *Portfolio) GetTickerData() {
 // Calculate the proportional number of shares to buy
 func (p *Portfolio) DoMath() {
     for ticker, _ := range p.Tickers {
-        // Determine the actual percentage of each ticker for the portfolio
-        actualPercent := (p.Tickers[ticker].Current / p.Total) * 100
+        // Determine the actual proportion of the portfolio for each ticker
+        // as a percentage
+        actualPercent:= (p.Tickers[ticker].Current / p.Total) * 100
 
         // Determine the difference between the actual percent that each ticker
         // represents & the desired percent we want to obtain
@@ -121,11 +122,15 @@ func (p *Portfolio) DoMath() {
 
         // Translate that difference in desired percentage into a dollar amount
         // We must check if either of these are 0
-        amountToChange := (targetPercent * p.Total) / 100
+        amountToChange := (targetPercent * p.Addition) / 100
 
         // Giving us the # of shares to buy or sell to reach our desired percentage
         // We must check if either of these are 0
         sharesToBuy := (amountToChange / p.Tickers[ticker].RegularMarketPrice)
-        fmt.Println(sharesToBuy)
+
+        // Round to two sig figs & print
+        atc := fmt.Sprintf("%.2f", amountToChange)
+        stb := fmt.Sprintf("%.2f", sharesToBuy)
+        fmt.Printf("%v - Buy $%v or %v shares\n", ticker, atc, stb)
     }
 }
