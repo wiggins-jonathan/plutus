@@ -33,7 +33,7 @@ func ExecuteRebalance(file string) {
 func NewPortfolio(data map[string]interface{}) *Portfolio {
     var p Portfolio
     t := make(map[string]*Ticker)
-    var sumTotal float64
+    var sumTotal, sumPercents float64
     for key, value := range data {
         if key == "addition" {
             switch value.(type) {
@@ -53,7 +53,8 @@ func NewPortfolio(data map[string]interface{}) *Portfolio {
         c := value["current"].(float64)
         d := value["desired"].(float64)
 
-        sumTotal = sumTotal + c
+        sumTotal    = sumTotal + c
+        sumPercents = sumPercents + d
 
         t[key] = &Ticker{
             Current: c,
@@ -62,6 +63,10 @@ func NewPortfolio(data map[string]interface{}) *Portfolio {
         p.Tickers = t
     }
     p.Total = sumTotal
+
+    if sumPercents != 100 {
+        Error("The sum of all <desired> fields must equal 100\n")
+    }
 
     return &p
 }
