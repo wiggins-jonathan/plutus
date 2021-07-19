@@ -7,16 +7,23 @@ import (
     _ "flag"
 )
 
+func Usage() {
+    fmt.Printf("PRC - This is generic usage for prc\n")
+    fmt.Printf("    This continues the usage\n")
+}
+
 // Checks command line args & return the args if valid, otherwise call Usage()
 func ArgParse(args []string) []string {
     if len(args) < 2 {
-        Usage("You need at least one arg")
+        Colorize("Please specify a command", "red")
+        Usage()
+        os.Exit(1)
     }
     return args
 }
 
 // Adds color to messages printed to the command line
-func Colorize(message string, color string) {
+func Colorize(message interface{}, color string) {
     switch color {
     case "red"      : color = "\033[31m"
     case "green"    : color = "\033[32m"
@@ -29,11 +36,11 @@ func Colorize(message string, color string) {
     }
     reset := "\033[0m"
 
-    fmt.Println(color + message + reset)
+    fmt.Printf("%v%v%v\n", color, message, reset)
 }
 
-// Prints a red message & the usage statement to the command line & exits
-func Usage(messages ...string) {
+// Prints a red error message to the command line & exits
+func Error(messages ...interface{}) {
     for _, message := range messages {
         Colorize(message, "red")
     }
