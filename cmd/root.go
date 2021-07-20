@@ -13,6 +13,11 @@ func ArgParse(args []string) {
     // Execute based on args
     switch args[1] {
     case "server"   : ExecuteServer()
+    case "price"    :
+        if len(args) < 3 {
+            Error("Please specify a ticker in which to get price data\n")
+        }
+        executePrices(args[2:])
     case "rebalance":
         if len(args) < 3 {
             Error("Please specify a file to parse for portfolio data\n")
