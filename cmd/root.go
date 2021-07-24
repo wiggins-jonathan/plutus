@@ -1,4 +1,3 @@
-// A command line library for prc
 package cmd
 
 import (
@@ -31,9 +30,9 @@ func ArgParse(args []string) {
 }
 
 func Usage() {
-    fmt.Printf("PRC - A tool for recalculating your stock porfolio\n\n")
+    fmt.Printf("plutus - A tool for recalculating your stock porfolio\n\n")
     fmt.Printf("Usage:\n")
-    fmt.Printf("    prc <command> [arguments]\n\n")
+    fmt.Printf("    plutus <command> [arguments]\n\n")
     fmt.Printf("Commands:\n")
     fmt.Printf("    server      Start a server instance listening for REST calls\n")
     fmt.Printf("    price       Get a price quote for a space-separated list of tickers\n")
