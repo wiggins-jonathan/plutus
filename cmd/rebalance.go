@@ -5,7 +5,7 @@ import (
     "fmt"
     "sync"
 
-    "prc/ingest"
+    "gitlab.com/wiggins.jonathan/plutus/ingest"
 
     "github.com/piquette/finance-go/quote"
 )

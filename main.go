@@ -3,7 +3,7 @@ package main
 import (
     "os"
 
-    "prc/cmd"
+    "gitlab.com/wiggins.jonathan/plutus/cmd"
 )
 
 func main() {
