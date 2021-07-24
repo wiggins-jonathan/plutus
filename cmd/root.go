@@ -23,6 +23,7 @@ func ArgParse(args []string) {
             Error("Please specify a file to parse for portfolio data\n")
         }
         ExecuteRebalance(args[2])
+    case "help", "-h", "--help": Usage()
     default:
         err := fmt.Sprintf("%s is not a valid command\n", args[1])
         Error(err)
@@ -30,12 +31,13 @@ func ArgParse(args []string) {
 }
 
 func Usage() {
-    fmt.Printf("PRC - A tool for recalculating your stock porfolio\n")
+    fmt.Printf("PRC - A tool for recalculating your stock porfolio\n\n")
     fmt.Printf("Usage:\n")
-    fmt.Printf("    prc <command> [arguments]\n")
+    fmt.Printf("    prc <command> [arguments]\n\n")
     fmt.Printf("Commands:\n")
-    fmt.Printf("    rebalance <file>    Rebalance a portfolio defined in a yaml or json file\n")
-    fmt.Printf("    server              Start a server instance listening for REST calls\n")
+    fmt.Printf("    server      Start a server instance listening for REST calls\n")
+    fmt.Printf("    price       Get a price quote for a space-separated list of tickers\n")
+    fmt.Printf("    rebalance   Rebalance a portfolio defined in a yaml or json file\n")
 }
 
 // Adds color to messages printed to the command line
