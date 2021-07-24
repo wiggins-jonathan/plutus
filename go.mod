@@ -1,4 +1,4 @@
-module prc
+module gitlab.com/wiggins.jonathan/plutus
 
 go 1.16
 
