@@ -7,5 +7,5 @@ import (
 )
 
 func main() {
-    cmd.ArgParse(os.Args)
+    cmd.ArgParse(os.Args[1:])
 }

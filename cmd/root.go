@@ -7,24 +7,24 @@ import (
 
 // Parses & validates args. Calls execute functions.
 func ArgParse(args []string) {
-    if len(args) < 2 { Error("Please specify a command\n") }
+    if len(args) < 1 { Error("Please specify a command\n") }
 
     // Execute based on args
-    switch args[1] {
+    switch args[0] {
     case "server"   : ExecuteServer()
     case "price"    :
-        if len(args) < 3 {
+        if len(args) < 2 {
             Error("Please specify a ticker in which to get price data\n")
         }
-        executePrices(args[2:])
+        executePrices(args[1:])
     case "rebalance":
-        if len(args) < 3 {
+        if len(args) < 2 {
             Error("Please specify a file to parse for portfolio data\n")
         }
-        ExecuteRebalance(args[2])
+        ExecuteRebalance(args[1])
     case "help", "-h", "--help": Usage()
     default:
-        err := fmt.Sprintf("%s is not a valid command\n", args[1])
+        err := fmt.Sprintf("%s is not a valid command\n", args[0])
         Error(err)
     }
 }
