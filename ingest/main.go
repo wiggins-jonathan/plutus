@@ -2,7 +2,6 @@
 package ingest
 
 import (
-    "io/ioutil"
     "path/filepath"
     "fmt"
     "encoding/json"
@@ -13,7 +12,7 @@ import (
 
 // Parse a json or yaml file
 func FileParse(file string) map[string]interface{} {
-    fileData, err := ioutil.ReadFile(file)
+    fileData, err := os.ReadFile(file)
     if err != nil {
         fmt.Println("error reading", file, err)
         os.Exit(1)
