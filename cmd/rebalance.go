@@ -53,8 +53,8 @@ func NewPortfolio(data map[string]interface{}) *Portfolio {
         c := value["current"].(float64)
         d := value["desired"].(float64)
 
-        sumTotal    = sumTotal + c
-        sumPercents = sumPercents + d
+        sumTotal    += c
+        sumPercents += d
 
         t[key] = &Ticker{
             Current: c,
