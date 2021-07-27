@@ -3,6 +3,7 @@ package cmd
 import (
     "os"
     "fmt"
+    "path"
 )
 
 // Parses & validates args. Calls execute functions.
@@ -30,11 +31,12 @@ func ArgParse(args []string) {
 }
 
 func Usage() {
-    fmt.Printf("plutus - A tool for recalculating your stock porfolio\n\n")
+    basename := path.Base(os.Args[0])
+    fmt.Printf("%s - A financial services tool\n\n", basename)
     fmt.Printf("Usage:\n")
-    fmt.Printf("    plutus <command> [arguments]\n\n")
+    fmt.Printf("    %s <command> [arguments]\n\n", basename)
     fmt.Printf("Commands:\n")
-    fmt.Printf("    server      Start a server instance listening for REST calls\n")
+    fmt.Printf("    server      Start a server to access the API over the net\n")
     fmt.Printf("    price       Get a price quote for a space-separated list of tickers\n")
     fmt.Printf("    rebalance   Rebalance a portfolio defined in a yaml or json file\n")
 }
