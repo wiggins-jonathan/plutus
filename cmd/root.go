@@ -12,17 +12,17 @@ func ArgParse(args []string) {
 
     // Execute based on args
     switch args[0] {
-    case "server"   : ExecuteServer()
+    case "server"   : serve()
     case "price"    :
         if len(args) < 2 {
             Error("Please specify a ticker in which to get price data\n")
         }
-        executePrices(args[1:])
+        getPrices(args[1:])
     case "rebalance":
         if len(args) < 2 {
             Error("Please specify a file to parse for portfolio data\n")
         }
-        ExecuteRebalance(args[1])
+        rebalance(args[1])
     case "help", "-h", "--help": Usage()
     default:
         err := fmt.Sprintf("%s is not a valid command\n", args[0])
@@ -42,7 +42,7 @@ func Usage() {
 }
 
 // Adds color to messages printed to the command line
-func Colorize(message interface{}, color string) {
+func colorize(message interface{}, color string) {
     switch color {
     case "red"      : color = "\033[31m"
     case "green"    : color = "\033[32m"
@@ -61,7 +61,7 @@ func Colorize(message interface{}, color string) {
 // Prints a red error message to the command line & exits
 func Error(messages ...interface{}) {
     for _, message := range messages {
-        Colorize(message, "red")
+        colorize(message, "red")
     }
     Usage()
     os.Exit(1)

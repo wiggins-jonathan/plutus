@@ -13,12 +13,12 @@ func getPrice(ticker string) float64 {
     if err != nil {
         Error("Error getting ticker data from Yahoo Finance", err)
     }
-    fmt.Printf("%s - %.2f\n", ticker, q.RegularMarketPrice)
+    fmt.Printf("%s - $%.2f\n", ticker, q.RegularMarketPrice)
     return q.RegularMarketPrice
 }
 
 // Range over all tickers passed in from the CLI args
-func executePrices(tickers []string) {
+func getPrices(tickers []string) {
     for _, ticker := range tickers {
         getPrice(ticker)
     }

@@ -1,4 +1,4 @@
-// Code for REST API
+// Code for web API
 package cmd
 
 import (
@@ -7,12 +7,14 @@ import (
     "net/http"
 )
 
-func ExecuteServer() {
-    http.HandleFunc("/", helloWorld)
+func serve() {
+    http.HandleFunc("/p", getDailyPrice)
+    fmt.Println("Server listening on port 5000")
     log.Fatal(http.ListenAndServe(":5000", nil))
 }
 
-func helloWorld(w http.ResponseWriter, r *http.Request) {
-    fmt.Fprintf(w, "Hello World")
-    fmt.Println("Endpoint Hit: HomePage")
+func getDailyPrice(w http.ResponseWriter, r *http.Request) {
+    // Take in the ticker & call GetPrice()
+    price := getPrice("AMZN")
+    fmt.Fprintf(w, "Price is %g", price)
 }

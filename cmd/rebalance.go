@@ -22,15 +22,15 @@ type Portfolio struct {
     Total       float64
 }
 
-func ExecuteRebalance(file string) {
+func rebalance(file string) {
     data := ingest.FileParse(file)
-    p := NewPortfolio(data)
-    p.GetTickerData()
-    p.DoMath()
+    p := newPortfolio(data)
+    p.getTickerData()
+    p.doMath()
 }
 
 // Validate data & transform to Portfolio struct
-func NewPortfolio(data map[string]interface{}) *Portfolio {
+func newPortfolio(data map[string]interface{}) *Portfolio {
     var p Portfolio
     t := make(map[string]*Ticker)
     var sumTotal, sumPercents float64
@@ -74,7 +74,7 @@ func NewPortfolio(data map[string]interface{}) *Portfolio {
 // Concurrently get ticker price from finance-go & embed in Portfolio struct
 // We might want to think about just wholly embedding q into p & then creating
 // multiple methods to return specific data
-func (p *Portfolio) GetTickerData() {
+func (p *Portfolio) getTickerData() {
     wg := sync.WaitGroup{}
     for ticker, _ := range p.Tickers {
         wg.Add(1)
@@ -94,7 +94,7 @@ func (p *Portfolio) GetTickerData() {
 }
 
 // Calculate the proportional number of shares to buy
-func (p *Portfolio) DoMath() {
+func (p *Portfolio) doMath() {
     for ticker, _ := range p.Tickers {
         // Determine the actual proportion of the portfolio for each ticker
         // as a percentage
