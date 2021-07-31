@@ -12,9 +12,10 @@ import (
 func ArgParse(args []string) {
     if len(args) < 1 { Error("Please specify a command\n") }
 
+    // Parse the /cmd dir discovering valid commands
     commands, err := getCommandFiles("cmd")
     if err != nil {
-        Error("Cannnot detect commands in /cmd directory")
+        Error("Cannot detect commands in /cmd directory", err)
     }
     _, found := func(slice []string, val string) (int, bool) {
         for i, item := range slice {
@@ -29,8 +30,7 @@ func ArgParse(args []string) {
         Error(err)
     }
 
-
-    // Execute based on args
+    // Execute command based on user input
     switch args[0] {
     case "server"   : serve()
     case "price"    :
@@ -87,6 +87,9 @@ func Error(messages ...interface{}) {
 // Walk a filepath & return slice of all command files
 func getCommandFiles(dir string) ([]string, error) {
     var paths []string
+    if _, err := os.Stat(dir); os.IsNotExist(err) {
+        return nil, err
+    }
     err := filepath.WalkDir(dir, func(file string, info os.DirEntry, err error) error {
         if strings.HasPrefix(info.Name(), ".") {
             if info.IsDir() {
