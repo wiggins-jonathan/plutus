@@ -53,6 +53,11 @@ func newPortfolio(data map[string]interface{}) *Portfolio {
         c := value["current"].(float64)
         d := value["desired"].(float64)
 
+        if c < 0 {
+            err := fmt.Sprintf("The <current> field for %s must be greater than 0\n", key)
+            Error(err)
+        }
+
         sumTotal    += c
         sumPercents += d
 
