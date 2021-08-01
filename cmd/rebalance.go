@@ -43,7 +43,7 @@ func newPortfolio(data map[string]interface{}) *Portfolio {
             case float64:
                 p.Addition = value.(float64)
             default:
-                Error("The <addition> field must be a number\n")
+                Error("The <addition> field must be a number")
             }
             continue
         }
@@ -54,7 +54,7 @@ func newPortfolio(data map[string]interface{}) *Portfolio {
         d := value["desired"].(float64)
 
         if c < 0 {
-            err := fmt.Sprintf("The <current> field for %s must be greater than 0\n", key)
+            err := fmt.Sprintf("The <current> field for %s must be greater than 0", key)
             Error(err)
         }
 
@@ -70,7 +70,7 @@ func newPortfolio(data map[string]interface{}) *Portfolio {
     p.Total = sumTotal
 
     if sumPercents != 100 {
-        Error("The sum of all <desired> fields must equal 100\n")
+        Error("The sum of all <desired> fields must equal 100")
     }
 
     return &p

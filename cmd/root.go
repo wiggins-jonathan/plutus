@@ -10,7 +10,7 @@ import (
 
 // Parses & validates args. Calls execute functions.
 func ArgParse(args []string) {
-    if len(args) < 1 { Error("Please specify a command\n") }
+    if len(args) < 1 { Error("Please specify a command") }
 
     // Parse the /cmd dir discovering valid commands
     commands, err := getCommandFiles("cmd")
@@ -26,7 +26,7 @@ func ArgParse(args []string) {
         return -1, false
     }(commands, args[0])
     if !found {
-        err := fmt.Sprintf("%s is not a valid command\n", args[0])
+        err := fmt.Sprintf("%s is not a valid command", args[0])
         Error(err)
     }
 
@@ -35,12 +35,12 @@ func ArgParse(args []string) {
     case "server"   : serve()
     case "price"    :
         if len(args) < 2 {
-            Error("Please specify a ticker in which to get price data\n")
+            Error("Please specify a ticker in which to get price data")
         }
         getPrices(args[1:])
     case "rebalance":
         if len(args) < 2 {
-            Error("Please specify a file to parse for portfolio data\n")
+            Error("Please specify a file to parse for portfolio data")
         }
         rebalance(args[1])
     case "help", "-h", "--help": Usage()
@@ -80,6 +80,7 @@ func Error(messages ...interface{}) {
     for _, message := range messages {
         colorize(message, "red")
     }
+    fmt.Printf("\n")
     Usage()
     os.Exit(1)
 }
