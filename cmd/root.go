@@ -5,8 +5,6 @@ import (
     "os"
     "fmt"
     "path"
-    "path/filepath"
-    "strings"
 
     "gitlab.com/wiggins.jonathan/plutus/server"
 )
@@ -14,24 +12,6 @@ import (
 // Parses & validates args. Calls execute functions.
 func ArgParse(args []string) {
     if len(args) < 1 { Error("Please specify a command") }
-
-    // Parse the /cmd dir discovering valid commands
-    commands, err := getCommandFiles("cmd")
-    if err != nil {
-        Error("Cannot detect commands in /cmd directory", err)
-    }
-    _, found := func(slice []string, val string) (int, bool) {
-        for i, item := range slice {
-            if item == val {
-                return i, true
-            }
-        }
-        return -1, false
-    }(commands, args[0])
-    if !found {
-        err := fmt.Sprintf("%s is not a valid command", args[0])
-        Error(err)
-    }
 
     // Execute command based on user input
     switch args[0] {
@@ -47,6 +27,9 @@ func ArgParse(args []string) {
         }
         rebalance(args[1])
     case "help", "-h", "--help": Usage()
+    default:
+        err := fmt.Sprintf("%s is not a valid command\n", args[0])
+        Error(err)
     }
 }
 
@@ -86,32 +69,4 @@ func Error(messages ...interface{}) {
     fmt.Printf("\n")
     Usage()
     os.Exit(1)
-}
-
-// Walk a filepath & return slice of all command files
-func getCommandFiles(dir string) ([]string, error) {
-    var paths []string
-    if _, err := os.Stat(dir); os.IsNotExist(err) {
-        return nil, err
-    }
-    err := filepath.WalkDir(dir, func(file string, info os.DirEntry, err error) error {
-        if strings.HasPrefix(info.Name(), ".") {
-            if info.IsDir() {
-                return filepath.SkipDir
-            }
-            return err
-        }
-
-        if !info.IsDir() {
-            if file == "cmd/root.go" {
-                return err
-            }
-            file := path.Base(file)
-            file = strings.TrimSuffix(file, filepath.Ext(file))
-            paths = append(paths, file)
-        }
-        return err
-
-    })
-    return paths, err
 }
