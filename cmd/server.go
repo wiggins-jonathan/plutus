@@ -5,6 +5,7 @@ import (
     "fmt"
     "log"
     "net/http"
+    "strings"
 )
 
 func serve() {
@@ -24,12 +25,14 @@ func priceHandler(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    ticker := r.URL.Query().Get("ticker")
-    if ticker == "" {
-        http.Error(w, "Please provide ticker=<ticker>", http.StatusBadRequest)
+    tickers := r.URL.Query().Get("tickers")
+    if tickers == "" {
+        http.Error(w, "Please provide tickers=<ticker1>,<tickerN>", http.StatusBadRequest)
         return
     }
 
-    price := getPrice(ticker)
-    fmt.Fprintf(w, "Price for %s is $%g", ticker, price)
+    for _, ticker := range strings.Split(tickers, ",") {
+        price := getPrice(ticker)
+        fmt.Fprintf(w, "Price for %s is $%g\n", ticker, price)
+    }
 }
