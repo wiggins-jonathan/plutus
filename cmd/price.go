@@ -1,4 +1,4 @@
-// Code for the price cmd
+// Get a current price quote for a given ticker
 package cmd
 
 import (
@@ -7,7 +7,7 @@ import (
     "github.com/piquette/finance-go/quote"
 )
 
-// Get concurrent price data
+// Get current price data for a single ticker
 func getPrice(ticker string) float64 {
     q, err := quote.Get(ticker)
     if err != nil {
@@ -17,7 +17,7 @@ func getPrice(ticker string) float64 {
     return q.RegularMarketPrice
 }
 
-// Range over all tickers passed in from the CLI args
+// Range over a slice of tickers, calling getPrice
 func getPrices(tickers []string) {
     for _, ticker := range tickers {
         getPrice(ticker)

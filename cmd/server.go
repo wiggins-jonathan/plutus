@@ -1,4 +1,4 @@
-// Code for web API
+// Start a server to access the API over the net
 package cmd
 
 import (

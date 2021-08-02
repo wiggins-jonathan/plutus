@@ -1,4 +1,4 @@
-// Code for the rebalance cmd
+// Rebalance a portfolio define in a yaml or json file
 package cmd
 
 import (
