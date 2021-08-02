@@ -1,14 +1,16 @@
 // Start a server to access the API over the net
-package cmd
+package server
 
 import (
     "fmt"
     "log"
     "net/http"
     "strings"
+
+    "gitlab.com/wiggins.jonathan/plutus/api"
 )
 
-func serve() {
+func Serve() {
     http.HandleFunc("/p", priceHandler)
     fmt.Println("Server listening on port 5000")
     log.Fatal(http.ListenAndServe(":5000", nil))
@@ -32,7 +34,7 @@ func priceHandler(w http.ResponseWriter, r *http.Request) {
     }
 
     for _, ticker := range strings.Split(tickers, ",") {
-        price := getPrice(ticker)
+        price := api.GetPrice(ticker)
         fmt.Fprintf(w, "Price for %s is $%g\n", ticker, price)
     }
 }

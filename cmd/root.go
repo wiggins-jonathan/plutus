@@ -7,6 +7,8 @@ import (
     "path"
     "path/filepath"
     "strings"
+
+    "gitlab.com/wiggins.jonathan/plutus/server"
 )
 
 // Parses & validates args. Calls execute functions.
@@ -33,7 +35,7 @@ func ArgParse(args []string) {
 
     // Execute command based on user input
     switch args[0] {
-    case "server"   : serve()
+    case "server"   : server.Serve()
     case "price"    :
         if len(args) < 2 {
             Error("Please specify a ticker in which to get price data")
