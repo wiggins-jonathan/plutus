@@ -28,7 +28,7 @@ func ArgParse(args []string) {
         rebalance(args[1])
     case "help", "-h", "--help": Usage()
     default:
-        err := fmt.Sprintf("%s is not a valid command\n", args[0])
+        err := fmt.Sprintf("%s is not a valid command", args[0])
         Error(err)
     }
 }
