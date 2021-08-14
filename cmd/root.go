@@ -1,47 +1,46 @@
-// Parse & instantiate CLI commands
+// Parse & execute CLI commands
 package cmd
 
 import (
     "os"
     "fmt"
-    "path"
 
     "gitlab.com/wiggins.jonathan/plutus/server"
+
+    "github.com/docopt/docopt-go"
 )
 
-// Parses & validates args. Calls execute functions.
-func ArgParse(args []string) {
-    if len(args) < 1 { Error("Please specify a command") }
+var usage string = `plutus - A financial services tool.
 
-    // Execute command based on user input
-    switch args[0] {
-    case "server"   : server.Serve()
-    case "price"    :
-        if len(args) < 2 {
-            Error("Please specify a ticker in which to get price data")
-        }
-        getPrices(args[1:])
-    case "rebalance":
-        if len(args) < 2 {
-            Error("Please specify a file to parse for portfolio data")
-        }
-        rebalance(args[1])
-    case "help", "-h", "--help": Usage()
-    default:
-        err := fmt.Sprintf("%s is not a valid command", args[0])
+Usage:
+    plutus [options] <command> [<args>...]
+
+Options:
+    -h, --help  Print this help dialogue
+
+Commands:
+    price       Get a price quote for a space-separated list of tickers.
+    rebalance   Rebalance a portfolio defined in a yaml or json file.
+    server      Start a server to access the API over the net.
+`
+
+// Parses & validates args. Calls execute functions.
+func ArgParse() {
+    parser := &docopt.Parser{ OptionsFirst: true }
+    opts, err := parser.ParseArgs(usage, nil, "")
+    if err != nil {
         Error(err)
     }
-}
 
-func Usage() {
-    basename := path.Base(os.Args[0])
-    fmt.Printf("%s - A financial services tool\n\n", basename)
-    fmt.Printf("Usage:\n")
-    fmt.Printf("    %s <command> [arguments]\n\n", basename)
-    fmt.Printf("Commands:\n")
-    fmt.Printf("    server      Start a server to access the API over the net\n")
-    fmt.Printf("    price       Get a price quote for a space-separated list of tickers\n")
-    fmt.Printf("    rebalance   Rebalance a portfolio defined in a yaml or json file\n")
+    cmd     := opts["<command>"].(string)
+    switch cmd {
+    case "price"    : getPrices()
+    case "rebalance": rebalance()
+    case "server"   : server.Serve()
+    default         :
+        err = fmt.Errorf("%s is not a command." , cmd)
+        Error(err)
+    }
 }
 
 // Adds color to messages printed to the command line
@@ -66,7 +65,6 @@ func Error(messages ...interface{}) {
     for _, message := range messages {
         colorize(message, "red")
     }
-    fmt.Printf("\n")
-    Usage()
+    fmt.Printf(usage)
     os.Exit(1)
 }

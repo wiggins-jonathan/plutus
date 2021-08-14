@@ -7,6 +7,7 @@ import (
 
     "gitlab.com/wiggins.jonathan/plutus/ingest"
 
+    "github.com/docopt/docopt-go"
     "github.com/piquette/finance-go/quote"
 )
 
@@ -22,7 +23,32 @@ type Portfolio struct {
     Total       float64
 }
 
-func rebalance(file string) {
+// Parse CLI, unmarshall file to struct, & rebalance
+func rebalance() {
+    usage := `plutus rebalance - Rebalance a portfolio defined in a yaml or json file.
+
+Usage:
+    plutus rebalance <file>
+
+The file must contain an 'addition' field with the amount to be added to the portfolio.
+Each ticker must contain 'desired' field with the desired percentage each ticker
+should constitute of the portfolio as well as a 'current' field with the current
+dollar amount of each ticker in the portfolio. All 'desired' amounts must equal 100%.
+A yaml example:
+schb:
+    desired: 50
+    current: 1000
+schf:
+    desired: 50
+    current: 2000
+addition: 326.15
+`
+    args, err := docopt.ParseDoc(usage)
+    if err != nil {
+        Error(err)
+    }
+
+    file := args["<file>"].(string)
     data := ingest.FileParse(file)
     p := newPortfolio(data)
     p.getTickerData()
