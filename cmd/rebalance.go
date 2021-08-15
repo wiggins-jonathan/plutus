@@ -3,12 +3,11 @@ package cmd
 
 import (
     "fmt"
-    "sync"
 
     "gitlab.com/wiggins.jonathan/plutus/ingest"
+    "gitlab.com/wiggins.jonathan/plutus/api"
 
     "github.com/docopt/docopt-go"
-    "github.com/piquette/finance-go/quote"
 )
 
 type Ticker struct {
@@ -106,22 +105,11 @@ func newPortfolio(data map[string]interface{}) *Portfolio {
 // We might want to think about just wholly embedding q into p & then creating
 // multiple methods to return specific data
 func (p *Portfolio) getTickerData() {
-    wg := sync.WaitGroup{}
     for ticker, _ := range p.Tickers {
-        wg.Add(1)
-        go func(ticker string) {
-            q, err := quote.Get(ticker)
-            if err != nil {
-                fmt.Println("Error getting ticker data from Yahoo Finance", err)
-            }
-
-            // Assign ticker data to Portfolio struct
-            p.Tickers[ticker].RegularMarketPrice = q.RegularMarketPrice
-
-            wg.Done()
-        }(ticker)
+        price := api.GetPrice(ticker)
+        // Assign ticker data to Portfolio struct
+        p.Tickers[ticker].RegularMarketPrice = price
     }
-    wg.Wait()
 }
 
 // Calculate the proportional number of shares to buy
