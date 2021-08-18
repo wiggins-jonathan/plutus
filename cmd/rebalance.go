@@ -1,4 +1,4 @@
-// Rebalance a portfolio define in a yaml or json file
+// Rebalance a portfolio defined in a yaml or json file
 package cmd
 
 import (
@@ -43,9 +43,7 @@ schf:
 addition: 326.15
 `
     args, err := docopt.ParseDoc(usage)
-    if err != nil {
-        Error(err)
-    }
+    if err != nil { Error(err) }
 
     file := args["<file>"].(string)
     data := ingest.FileParse(file)

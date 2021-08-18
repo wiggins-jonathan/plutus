@@ -1,4 +1,4 @@
-// Unmarshall a json or yaml structure
+// Unmarshal a json or yaml structure
 package ingest
 
 import (

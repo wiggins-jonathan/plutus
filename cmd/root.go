@@ -1,4 +1,4 @@
-// Parse & execute CLI commands
+// Entrypoint for CLI + utility functions
 package cmd
 
 import (
@@ -28,17 +28,15 @@ Commands:
 func ArgParse() {
     parser := &docopt.Parser{ OptionsFirst: true }
     opts, err := parser.ParseArgs(usage, nil, "")
-    if err != nil {
-        Error(err)
-    }
+    if err != nil { Error(err) }
 
-    cmd     := opts["<command>"].(string)
+    cmd := opts["<command>"].(string)
     switch cmd {
     case "price"    : getPrices()
     case "rebalance": rebalance()
     case "server"   : server.Serve()
     default         :
-        err = fmt.Errorf("%s is not a command." , cmd)
+        err = fmt.Errorf("%s is not a command.", cmd)
         Error(err)
     }
 }

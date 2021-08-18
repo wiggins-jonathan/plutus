@@ -17,9 +17,7 @@ Usage:
     plutus price <tickers>...
 `
     args, err := docopt.ParseDoc(usage)
-    if err != nil {
-        Error(err)
-    }
+    if err != nil { Error(err) }
 
     tickers := args["<tickers>"].([]string)
     for _, ticker := range tickers {
