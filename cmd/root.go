@@ -27,16 +27,17 @@ Commands:
 // Parses & validates args. Calls execute functions.
 func ArgParse() {
     parser := &docopt.Parser{ OptionsFirst: true }
-    opts, err := parser.ParseArgs(usage, nil, "")
+    args, err := parser.ParseArgs(usage, nil, "")
     if err != nil { Error(err) }
 
-    cmd := opts["<command>"].(string)
+    cmd := args["<command>"].(string)
     switch cmd {
+    case "help"     : fmt.Printf(usage)
     case "price"    : getPrices()
     case "rebalance": rebalance()
     case "server"   : server.Serve()
     default         :
-        err = fmt.Errorf("%s is not a command.", cmd)
+        err = fmt.Errorf("%s is not a valid command.", cmd)
         Error(err)
     }
 }
