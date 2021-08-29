@@ -21,7 +21,8 @@ Usage:
 
     tickers := args["<tickers>"].([]string)
     for _, ticker := range tickers {
-        price := api.GetPrice(ticker)
+        price, err := api.GetPrice(ticker)
+        if err != nil { Error(err) }
         fmt.Printf("%s - $%.2f\n", ticker, price)
     }
 }

@@ -2,16 +2,14 @@
 package api
 
 import (
-    "fmt"
-
     "github.com/piquette/finance-go/quote"
 )
 
 // Get current price data for a single ticker
-func GetPrice(ticker string) float64 {
+func GetPrice(ticker string) (float64, error) {
     q, err := quote.Get(ticker)
     if err != nil {
-        fmt.Printf("Error getting ticker data from Yahoo Finance", err)
+        return 0, err
     }
-    return q.RegularMarketPrice
+    return q.RegularMarketPrice, nil
 }

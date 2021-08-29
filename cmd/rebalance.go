@@ -104,7 +104,8 @@ func newPortfolio(data map[string]interface{}) *Portfolio {
 // multiple methods to return specific data
 func (p *Portfolio) getTickerData() {
     for ticker, _ := range p.Tickers {
-        price := api.GetPrice(ticker)
+        price, err := api.GetPrice(ticker)
+        if err != nil { Error(err) }
         // Assign ticker data to Portfolio struct
         p.Tickers[ticker].RegularMarketPrice = price
     }

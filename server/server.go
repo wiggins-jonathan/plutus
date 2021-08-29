@@ -34,7 +34,10 @@ func priceHandler(w http.ResponseWriter, r *http.Request) {
     }
 
     for _, ticker := range strings.Split(tickers, ",") {
-        price := api.GetPrice(ticker)
+        price, err := api.GetPrice(ticker)
+        if err != nil {
+            fmt.Fprintf(w, "Error retrieving price for %s\n", ticker)
+        }
         fmt.Fprintf(w, "Price for %s is $%g\n", ticker, price)
     }
 }
