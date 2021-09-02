@@ -12,8 +12,8 @@ import (
 
 func Serve() {
     http.HandleFunc("/p", priceHandler)
-    fmt.Println("Server listening on port 5000")
-    log.Fatal(http.ListenAndServe(":5000", nil))
+    fmt.Println("Server listening on port 8000")
+    log.Fatal(http.ListenAndServe(":8000", nil))
 }
 
 // Take in the ticker & call GetPrice()
