@@ -2,6 +2,8 @@
 package api
 
 import (
+    "fmt"
+
     "github.com/piquette/finance-go/quote"
 )
 
@@ -11,5 +13,10 @@ func GetPrice(ticker string) (float64, error) {
     if err != nil {
         return 0, err
     }
+
+    if q == nil {
+        return 0, fmt.Errorf("%s is an invalid ticker", ticker)
+    }
+
     return q.RegularMarketPrice, nil
 }
