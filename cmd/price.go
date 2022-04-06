@@ -6,23 +6,24 @@ import (
 
     "gitlab.com/wiggins.jonathan/plutus/api"
 
-    "github.com/docopt/docopt-go"
+    "github.com/spf13/cobra"
 )
 
-// Range over a slice of tickers, calling getPrice & printing to terminal
-func getPrices() {
-    usage := `plutus price - Get a price quote for a space-separated list of tickers
+func init() {
+    rootCmd.AddCommand(priceCmd)
+}
 
-Usage:
-    plutus price <tickers>...
-`
-    args, err := docopt.ParseDoc(usage)
-    if err != nil { Error(err) }
+var priceCmd = &cobra.Command{
+    Use     : "price",
+    Short   : "Get a price quote",
+    Long    : "Get a price quote for a space-separated list of tickers",
+    Args    : cobra.MinimumNArgs(1),
+    Run     : func(cmd *cobra.Command, args []string) {
+        for _, ticker := range args {
+            price, err := api.GetPrice(ticker)
+            if err != nil { Error(err) }
 
-    tickers := args["<tickers>"].([]string)
-    for _, ticker := range tickers {
-        price, err := api.GetPrice(ticker)
-        if err != nil { Error(err) }
-        fmt.Printf("%s - $%.2f\n", ticker, price)
-    }
+            fmt.Printf("%s - $%.2f\n", ticker, price)
+        }
+    },
 }

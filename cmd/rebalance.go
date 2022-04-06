@@ -7,7 +7,7 @@ import (
     "gitlab.com/wiggins.jonathan/plutus/ingest"
     "gitlab.com/wiggins.jonathan/plutus/api"
 
-    "github.com/docopt/docopt-go"
+    "github.com/spf13/cobra"
 )
 
 type Ticker struct {
@@ -22,34 +22,22 @@ type Portfolio struct {
     Total       float64
 }
 
-// Parse CLI, unmarshall file to struct, & rebalance
-func rebalance() {
-    usage := `plutus rebalance - Rebalance a portfolio defined in a yaml or json file.
+func init() {
+    rootCmd.AddCommand(rebalanceCmd)
+}
 
-Usage:
-    plutus rebalance <file>
-
-The file must contain an 'addition' field with the amount to be added to the portfolio.
-Each ticker must contain 'desired' field with the desired percentage each ticker
-should constitute of the portfolio as well as a 'current' field with the current
-dollar amount of each ticker in the portfolio. All 'desired' amounts must equal 100%.
-A yaml example:
-schb:
-    desired: 50
-    current: 1000
-schf:
-    desired: 50
-    current: 2000
-addition: 326.15
-`
-    args, err := docopt.ParseDoc(usage)
-    if err != nil { Error(err) }
-
-    file := args["<file>"].(string)
-    data := ingest.FileParse(file)
-    p := newPortfolio(data)
-    p.getTickerData()
-    p.doMath()
+var rebalanceCmd = &cobra.Command{
+    Use     : "rebalance",
+    Short   : "Rebalance a portfolio defined in a file",
+    Long    : "Rebalance a portfolio defined in a .yml or .json file",
+    Args    : cobra.ExactArgs(1),
+    Run     : func(cmd *cobra.Command, args []string) {
+        file := args[0]
+        data := ingest.FileParse(file)
+        p := newPortfolio(data)
+        p.getTickerData()
+        p.doMath()
+    },
 }
 
 // Validate data & transform to Portfolio struct

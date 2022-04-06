@@ -3,58 +3,20 @@ package cmd
 
 import (
     "os"
-    "os/exec"
     "fmt"
 
-    "gitlab.com/wiggins.jonathan/plutus/server"
-
-    "github.com/docopt/docopt-go"
+    "github.com/spf13/cobra"
 )
 
-var usage string = `plutus - A financial services tool.
-
-Usage:
-    plutus [options] <command> [<args>...]
-
-Options:
-    -h, --help  Print this help dialogue
-
-Commands:
-    help        Prints help dialog. Use "plutus help <command>" for more specific usage info.
-    price       Get a price quote for a space-separated list of tickers.
-    rebalance   Rebalance a portfolio defined in a yaml or json file.
-    server      Start a server to access the API over the net.
-`
-
-// Parses & validates args. Calls execute functions.
-func ArgParse() {
-    parser := &docopt.Parser{ OptionsFirst: true }
-    args, err := parser.ParseArgs(usage, nil, "")
-    if err != nil { Error(err) }
-
-    cmd := args["<command>"].(string)
-    switch cmd {
-    case "help"     : helper(args["<args>"].([]string))
-    case "price"    : getPrices()
-    case "rebalance": rebalance()
-    case "server"   : server.Serve()
-    default         :
-        err = fmt.Errorf("%s is not a valid command.", cmd)
-        Error(err)
-    }
+var rootCmd = &cobra.Command{
+    Use     : "plutus",
+    Short   : "A financial services tool",
 }
 
-// Allows the user to type "plutus help <command>" by translating to "plutus <command> -h"
-func helper(cmd []string) {
-    var cmdArgs []string
-    cmdArgs = append(cmdArgs, cmd...)
-    cmdArgs = append(cmdArgs, "-h")
-
-    osCmd := exec.Command("plutus", cmdArgs...)
-    out, err := osCmd.Output()
-    if err != nil { fmt.Println(err) }
-
-    fmt.Println(string(out))
+func Execute() {
+    if err := rootCmd.Execute(); err != nil {
+        os.Exit(1)
+    }
 }
 
 // Adds color to messages printed to the command line
@@ -79,6 +41,5 @@ func Error(messages ...interface{}) {
     for _, message := range messages {
         colorize(message, "red")
     }
-    fmt.Printf(usage)
     os.Exit(1)
 }
