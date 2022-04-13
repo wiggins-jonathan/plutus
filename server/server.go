@@ -13,7 +13,7 @@ import (
 
 func Serve() {
     http.HandleFunc("/p", priceHandler)
-    fmt.Println("Server listening on port 8000")
+    fmt.Println("Server listening on port 8000. Ctrl+c to quit.")
     log.Fatal(http.ListenAndServe(":8000", nil))
 }
 
