@@ -27,9 +27,11 @@ func init() {
 }
 
 var rebalanceCmd = &cobra.Command{
-    Use     : "rebalance",
+    Use     : "rebalance <file.yml | file.json>",
+    Aliases : []string{"r"},
     Short   : "Rebalance a portfolio defined in a file",
     Long    : "Rebalance a portfolio defined in a .yml or .json file",
+    Example : "plutus rebalance rothIra.yml",
     Args    : cobra.ExactArgs(1),
     Run     : func(cmd *cobra.Command, args []string) {
         file := args[0]
