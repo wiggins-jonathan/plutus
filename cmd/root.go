@@ -8,9 +8,16 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var Version = "development"
+
 var rootCmd = &cobra.Command{
-	Use:   "plutus",
-	Short: "A financial services tool",
+	Use:     "plutus",
+	Short:   "A financial services tool",
+	Version: Version, // overridden by ldflags at build time
+}
+
+func init() {
+	rootCmd.SetVersionTemplate("{{.Version}}\n")
 }
 
 func Execute() {
