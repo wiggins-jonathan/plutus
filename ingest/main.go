@@ -21,8 +21,7 @@ func FileParse(file string) map[string]interface{} {
 	// First load the data to map[string]interface{}.
 	// This is done because we don't know how many Tickers there will be.
 	var data map[string]interface{}
-	extension := filepath.Ext(file)
-	switch extension {
+	switch extension := filepath.Ext(file); extension {
 	case ".yml", ".yaml":
 		err = yaml.Unmarshal(fileData, &data)
 	default:
