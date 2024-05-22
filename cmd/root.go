@@ -8,9 +8,28 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var (
+	version = "development"
+	debug   bool
+)
+
 var rootCmd = &cobra.Command{
-	Use:   "plutus",
-	Short: "A financial services tool",
+	Use:     "plutus",
+	Short:   "The financial services tool",
+	Long:    "plutus - The Financial Services Tool",
+	Version: version, // overriden by ldflags at build time
+	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+		if debug {
+			fmt.Println("Debug mode enabled!")
+		}
+	},
+}
+
+func init() {
+	rootCmd.SetVersionTemplate("{{.Version}}\n")
+	rootCmd.PersistentFlags().BoolVarP(
+		&debug, "debug", "d", false, "Enable Debug mode",
+	)
 }
 
 func Execute() {
