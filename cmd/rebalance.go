@@ -33,17 +33,24 @@ var rebalanceCmd = &cobra.Command{
 	Long:    "Rebalance a portfolio defined in a .yml or .json file",
 	Example: "plutus rebalance rothIra.yml",
 	Args:    cobra.ExactArgs(1),
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		file := args[0]
-		data := ingest.FileParse(file)
+
+		data, err := ingest.FileParse(file)
+		if err != nil {
+			return err
+		}
+
 		p := newPortfolio(data)
 		p.getTickerData()
 		p.doMath()
+
+		return nil
 	},
 }
 
 // Validate data & transform to Portfolio struct
-func newPortfolio(data map[string]interface{}) *Portfolio {
+func newPortfolio(data map[string]any) *Portfolio {
 	var p Portfolio
 	t := make(map[string]*Ticker)
 	var sumTotal, sumPercents float64
@@ -62,7 +69,7 @@ func newPortfolio(data map[string]interface{}) *Portfolio {
 		}
 
 		// More type assertions
-		value := value.(map[string]interface{})
+		value := value.(map[string]any)
 		c := value["current"].(float64)
 		d := value["desired"].(float64)
 
@@ -89,7 +96,7 @@ func newPortfolio(data map[string]interface{}) *Portfolio {
 	return &p
 }
 
-// Concurrently get ticker price from finance-go & embed in Portfolio struct
+// Concurrently get ticker price from the api & embed in Portfolio struct
 // We might want to think about just wholly embedding q into p & then creating
 // multiple methods to return specific data
 func (p *Portfolio) getTickerData() {

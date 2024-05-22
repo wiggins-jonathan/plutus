@@ -11,16 +11,15 @@ import (
 )
 
 // Parse a json or yaml file
-func FileParse(file string) map[string]interface{} {
+func FileParse(file string) (map[string]any, error) {
 	fileData, err := os.ReadFile(file)
 	if err != nil {
-		fmt.Println("error reading", file, err)
-		os.Exit(1)
+		fmt.Errorf("error reading %s: %w", file, err)
 	}
 
-	// First load the data to map[string]interface{}.
+	// First load the data to map[string]any.
 	// This is done because we don't know how many Tickers there will be.
-	var data map[string]interface{}
+	var data map[string]any
 	extension := filepath.Ext(file)
 	switch extension {
 	case ".yml", ".yaml":
@@ -30,9 +29,8 @@ func FileParse(file string) map[string]interface{} {
 	}
 
 	if err != nil {
-		fmt.Println("Error unmarshalling", file, err)
-		os.Exit(1)
+		fmt.Errorf("Error unmarshalling %s: %w", file, err)
 	}
 
-	return data
+	return data, nil
 }
