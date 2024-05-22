@@ -18,7 +18,7 @@ import (
 func FileParse(file string) (map[string]any, error) {
 	fileData, err := os.ReadFile(file)
 	if err != nil {
-		fmt.Errorf("error reading %s: %w", file, err)
+		return nil, fmt.Errorf("error reading %s: %w", file, err)
 	}
 
 	// First load the data to map[string]any.
@@ -33,7 +33,7 @@ func FileParse(file string) (map[string]any, error) {
 	}
 
 	if err != nil {
-		fmt.Errorf("Error unmarshalling %s: %w", file, err)
+		return nil, fmt.Errorf("Error unmarshalling %s: %w", file, err)
 	}
 
 	return data, nil
