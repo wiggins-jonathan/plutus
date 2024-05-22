@@ -4,17 +4,53 @@ package server
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 	"strings"
 
 	"gitlab.com/wiggins.jonathan/plutus/api"
 )
 
-func Serve() {
+type ServerOption func(*server)
+
+type server struct {
+	Port  int
+	Debug bool
+}
+
+// NewServer returns a server with optional defaults
+func NewServer(options ...ServerOption) *server {
+	server := &server{Port: 8080, Debug: false}
+
+	for _, option := range options {
+		option(server)
+	}
+
+	return server
+}
+
+// Serve serves the plutus API
+func (s *server) Serve() error {
 	http.HandleFunc("/p", priceHandler)
-	fmt.Println("Server listening on port 8000. Ctrl+c to quit.")
-	log.Fatal(http.ListenAndServe(":8000", nil))
+
+	port := fmt.Sprintf(":%d", s.Port)
+	fmt.Printf("Server listening at http://localhost%s - Ctrl+c to quit.\n", port)
+	if err := http.ListenAndServe(port, nil); err != nil {
+		return fmt.Errorf("Failed to start server: %w", err)
+	}
+
+	return nil
+}
+
+func WithPort(port int) ServerOption {
+	return func(s *server) {
+		s.Port = port
+	}
+}
+
+func WithDebug(debug bool) ServerOption {
+	return func(s *server) {
+		s.Debug = debug
+	}
 }
 
 // Take in the ticker & call GetPrice()
