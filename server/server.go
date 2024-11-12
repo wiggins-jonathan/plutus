@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"strings"
 
-	"gitlab.com/wiggins.jonathan/plutus/api"
+	"github.com/wiggins-jonathan/plutus/api"
 )
 
 type ServerOption func(*server)

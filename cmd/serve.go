@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"gitlab.com/wiggins.jonathan/plutus/server"
+	"github.com/wiggins-jonathan/plutus/server"
 
 	"github.com/spf13/cobra"
 )

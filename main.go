@@ -1,7 +1,7 @@
 package main
 
 import (
-	"gitlab.com/wiggins.jonathan/plutus/cmd"
+	"github.com/wiggins-jonathan/plutus/cmd"
 )
 
 func main() {

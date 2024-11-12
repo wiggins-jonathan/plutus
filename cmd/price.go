@@ -4,7 +4,7 @@ package cmd
 import (
 	"fmt"
 
-	"gitlab.com/wiggins.jonathan/plutus/api"
+	"github.com/wiggins-jonathan/plutus/api"
 
 	"github.com/spf13/cobra"
 )

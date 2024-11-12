@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"gitlab.com/wiggins.jonathan/plutus/ingest"
+	"github.com/wiggins-jonathan/plutus/ingest"
 
 	"github.com/spf13/cobra"
 )

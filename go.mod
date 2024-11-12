@@ -1,4 +1,4 @@
-module gitlab.com/wiggins.jonathan/plutus
+module github.com/wiggins-jonathan/plutus
 
 go 1.23.2
 
