@@ -4,13 +4,13 @@ package api
 import (
 	"fmt"
 
-	yf "github.com/shoenig/yahoo-finance"
+	yf "github.com/wiggins-jonathan/yfinance"
 )
 
 // Get current price data for a single ticker
 func GetPrice(ticker string) (float64, error) {
-	client := yf.New(nil)
-	data, err := client.Lookup(ticker)
+	client := yf.NewClient()
+	data, err := client.Get(ticker)
 	if err != nil {
 		return 0, fmt.Errorf("Could not obtain data from yahoo finance: %w", err)
 	}

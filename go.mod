@@ -1,10 +1,10 @@
 module gitlab.com/wiggins.jonathan/plutus
 
-go 1.22.3
+go 1.23.2
 
 require (
-	github.com/shoenig/yahoo-finance v0.0.2
 	github.com/spf13/cobra v1.4.0
+	github.com/wiggins-jonathan/yfinance v0.0.0-20241112055659-e208ce1adad4
 	gopkg.in/yaml.v3 v3.0.1
 )
 
