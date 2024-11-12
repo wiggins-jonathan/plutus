@@ -14,11 +14,10 @@ func init() {
 }
 
 var parseCmd = &cobra.Command{
-	Use:     "parse [directory]",
-	Aliases: []string{"p"},
-	Short:   "Parse beancount files",
-	Long:    "Parse beancount files recursively",
-	Args:    cobra.MaximumNArgs(1),
+	Use:   "parse [directory]",
+	Short: "Parse beancount files",
+	Long:  "Parse beancount files recursively",
+	Args:  cobra.MaximumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		dir, err := os.Getwd() // default to current working directory
 		if err != nil {

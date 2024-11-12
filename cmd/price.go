@@ -15,7 +15,7 @@ func init() {
 
 var priceCmd = &cobra.Command{
 	Use:     "price <tickers...>",
-	Aliases: []string{"p"},
+	Aliases: []string{"p", "prices"},
 	Short:   "Get a price quote",
 	Long:    "Get a price quote for a space-separated list of tickers",
 	Example: "plutus price swagx swisx",
