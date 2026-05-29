@@ -4,7 +4,7 @@ go 1.23.2
 
 require (
 	github.com/spf13/cobra v1.4.0
-	github.com/wiggins-jonathan/yfinance v0.0.0-20241112055659-e208ce1adad4
+	github.com/wiggins-jonathan/yfinance v0.0.0-20260529002254-58a422caac20
 	gopkg.in/yaml.v3 v3.0.1
 )
 
